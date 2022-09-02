@@ -862,12 +862,12 @@ msgstr ""
 #: lib/block_scout_web/templates/smart_contract/_functions.html.eex:146
 #, elixir-autogen, elixir-format
 msgid "ETH"
-msgstr "EDEXA"
+msgstr "EDX"
 
 #: lib/block_scout_web/templates/api_docs/eth_rpc.html.eex:4
 #, elixir-autogen, elixir-format
 msgid "ETH RPC API Documentation"
-msgstr "EDEXA"
+msgstr "EDX"
 
 #: lib/block_scout_web/templates/address_contract/index.html.eex:76
 #: lib/block_scout_web/templates/address_contract_verification_via_flattened_code/new.html.eex:26

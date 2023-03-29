@@ -20,6 +20,30 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
+        <%= if Application.get_env(:block_scout_web, BlockScoutWeb.ApiRouter)[:reading_enabled] || Application.get_env(:block_scout_web, :api_url) do %>
+          <li class="nav-item dropdown">
+            <a href="#" role="button" id="navbarAPIsDropdown" class="nav-link topnav-nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="nav-link-icon">
+                <%= render BlockScoutWeb.IconsView, "_apps_icon.html" %>
+              </span>
+              <%= gettext("Mainnet/Testnet") %>
+            </a>
+            <div class="dropdown-menu" aria-labeledby="navbarTransactionsDropdown">
+              <%= link(
+                    gettext("Mainnet"),
+                    class: "dropdown-item #{tab_status("graphiql", @conn.request_path)}",
+                    to: "https://explorer.edexa.com/",
+                    target: "_blank"
+                  ) %>
+                  <%= link(
+                    gettext("Testnet"),
+                    class: "dropdown-item #{tab_status("graphiql", @conn.request_path)}",
+                    to: "https://explorer.testnet.edexa.com/",
+                    target: "_blank"
+                  ) %>
+            </div>
+          </li>
+        <% end %>
         <%= if Application.get_env(:block_scout_web, BlockScoutWeb.WebRouter)[:enabled] do %>
           <li class="nav-item dropdown">
             <a class="nav-link topnav-nav-link dropdown-toggle" href="#" id="navbarBlocksDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

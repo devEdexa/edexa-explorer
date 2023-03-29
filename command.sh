@@ -5,7 +5,7 @@ docker-compose -f docker-compose/docker-compose-no-build-ganache.yml down --remo
 docker build -f docker/Dockerfile . -t local/blockscout
 
 #This command is used for to run the docker with compose file
-docker-compose -f docker-compose/docker-compose-no-build-ganache.yml up -d 
+docker-compose -f docker-compose/docker-compose-no-build-ganache.yml up -d
 
 #To view the logs then use below command
 docker logs blockscout -f

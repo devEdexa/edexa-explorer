@@ -1,6 +1,7 @@
 #To stop the container, please user below command
 docker-compose -f docker-compose/docker-compose-no-build-ganache.yml down --remove-orphans
 
+
 #This command is used to build docker
 docker build -f docker/Dockerfile . -t local/blockscout
 

@@ -352,7 +352,7 @@ defmodule Explorer.Chain.SmartContract do
       ])
       |> (&if(json_verification,
             do: &1,
-            else: validate_required(&1, [:name, :compiler_version, :optimization, :address_hash, :contract_code_md5])
+            else: validate_required(&1, [:compiler_version, :optimization, :address_hash, :contract_code_md5])
           )).()
 
     field_to_put_message = if json_verification, do: :files, else: select_error_field(error)
@@ -608,19 +608,7 @@ defmodule Explorer.Chain.SmartContract do
     if Application.get_env(:explorer, :enable_caching_implementation_data_of_proxy) do
       now = DateTime.utc_now()
 
-      average_block_time =
-        if Application.get_env(:explorer, :avg_block_time_as_ttl_cached_implementation_data_of_proxy) do
-          case AverageBlockTime.average_block_time() do
-            {:error, :disabled} ->
-              0
-
-            duration ->
-              duration
-              |> Duration.to_milliseconds()
-          end
-        else
-          0
-        end
+      average_block_time = get_average_block_time()
 
       fresh_time_distance =
         case average_block_time do
@@ -636,6 +624,21 @@ defmodule Explorer.Chain.SmartContract do
       |> DateTime.compare(now) != :gt
     else
       true
+    end
+  end
+
+  defp get_average_block_time do
+    if Application.get_env(:explorer, :avg_block_time_as_ttl_cached_implementation_data_of_proxy) do
+      case AverageBlockTime.average_block_time() do
+        {:error, :disabled} ->
+          0
+
+        duration ->
+          duration
+          |> Duration.to_milliseconds()
+      end
+    else
+      0
     end
   end
 

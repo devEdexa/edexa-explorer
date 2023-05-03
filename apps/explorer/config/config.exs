@@ -110,14 +110,11 @@ config :explorer, Explorer.Chain.Fetcher.CheckBytecodeMatchingOnDemand, enabled:
 config :explorer, Explorer.Chain.Fetcher.FetchValidatorInfoOnDemand, enabled: true
 
 config :explorer, Explorer.Chain.Cache.GasUsage,
-  enabled: ConfigHelper.parse_bool_env_var("CACHE_ENABLE_TOTAL_GAS_USAGE_COUNTER")
+  enabled: ConfigHelper.parse_bool_env_var("CACHE_TOTAL_GAS_USAGE_COUNTER_ENABLED")
 
 config :explorer, Explorer.Integrations.EctoLogger, query_time_ms_threshold: :timer.seconds(2)
 
 config :explorer, Explorer.Tags.AddressTag.Cataloger, enabled: true
-
-config :explorer, Explorer.Chain.Cache.MinMissingBlockNumber,
-  enabled: !ConfigHelper.parse_bool_env_var("DISABLE_WRITE_API")
 
 config :explorer, Explorer.Repo, migration_timestamps: [type: :utc_datetime_usec]
 

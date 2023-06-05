@@ -13,7 +13,7 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
   alias Explorer.Chain.Import.Runner
   alias Explorer.Prometheus.Instrumenter
   alias Explorer.Repo, as: ExplorerRepo
-  alias Explorer.Utility.MissingBlockRange
+  alias Explorer.Utility.MissingRangesManipulator
 
   import Ecto.Query, only: [from: 2]
 
@@ -281,11 +281,11 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
 
     query =
       from(
-        b in Block,
-        where: b.number in ^block_numbers and b.consensus,
-        select: b.hash,
+        block in Block,
+        where: block.number in ^block_numbers and block.consensus,
+        select: block.hash,
         # Enforce Block ShareLocks order (see docs: sharelocks.md)
-        order_by: [asc: b.hash],
+        order_by: [asc: block.hash],
         lock: "FOR UPDATE"
       )
 
@@ -427,18 +427,28 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     if valid_internal_transactions_count == 0 do
       {:ok, nil}
     else
+      created_contract_address_hash_map =
+        valid_internal_transactions
+        |> Enum.group_by(& &1.transaction_hash)
+        |> Enum.map(fn {transaction_hash, internal_transactions} ->
+          {transaction_hash, Enum.find_value(internal_transactions, & &1[:created_contract_address_hash])}
+        end)
+        |> Enum.into(%{})
+
       params =
         valid_internal_transactions
         |> Enum.filter(fn internal_tx ->
           internal_tx[:index] == 0
         end)
         |> Enum.map(fn trace ->
+          transaction_hash = Map.get(trace, :transaction_hash)
+
           %{
             block_hash: Map.get(trace, :block_hash),
             block_number: Map.get(trace, :block_number),
             gas_used: Map.get(trace, :gas_used),
-            transaction_hash: Map.get(trace, :transaction_hash),
-            created_contract_address_hash: Map.get(trace, :created_contract_address_hash),
+            transaction_hash: transaction_hash,
+            created_contract_address_hash: created_contract_address_hash_map[transaction_hash],
             error: Map.get(trace, :error),
             status: if(is_nil(Map.get(trace, :error)), do: :ok, else: :error)
           }
@@ -671,10 +681,10 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
     if Enum.count(invalid_block_numbers) > 0 do
       update_query =
         from(
-          b in Block,
-          where: b.number in ^invalid_block_numbers and b.consensus,
-          where: b.number > ^minimal_block,
-          select: b.hash,
+          block in Block,
+          where: block.number in ^invalid_block_numbers and block.consensus,
+          where: block.number > ^minimal_block,
+          select: block.hash,
           # ShareLocks order already enforced by `acquire_blocks` (see docs: sharelocks.md)
           update: [set: [consensus: false]]
         )
@@ -682,7 +692,7 @@ defmodule Explorer.Chain.Import.Runner.InternalTransactions do
       try do
         {_num, result} = repo.update_all(update_query, [])
 
-        MissingBlockRange.add_ranges_by_block_numbers(invalid_block_numbers)
+        MissingRangesManipulator.add_ranges_by_block_numbers(invalid_block_numbers)
 
         Logger.debug(fn ->
           [

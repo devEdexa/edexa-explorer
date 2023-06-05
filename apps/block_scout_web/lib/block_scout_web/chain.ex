@@ -30,7 +30,9 @@ defmodule BlockScoutWeb.Chain do
     Token.Instance,
     TokenTransfer,
     Transaction,
-    Wei
+    Transaction.StateChange,
+    Wei,
+    Withdrawal
   }
 
   alias Explorer.PagingOptions
@@ -288,6 +290,13 @@ defmodule BlockScoutWeb.Chain do
     [paging_options: %{@default_paging_options | key: {id}}]
   end
 
+  def paging_options(%{"items_count" => items_count, "state_changes" => _}) do
+    case Integer.parse(items_count) do
+      {count, ""} -> [paging_options: %{@default_paging_options | key: {count}}]
+      _ -> @default_paging_options
+    end
+  end
+
   def paging_options(_params), do: [paging_options: @default_paging_options]
 
   def put_key_value_to_paging_options([paging_options: paging_options], key, value) do
@@ -437,6 +446,10 @@ defmodule BlockScoutWeb.Chain do
     %{"smart_contract_id" => smart_contract.id}
   end
 
+  defp paging_params(%Withdrawal{index: index}) do
+    %{"index" => index}
+  end
+
   # clause for search results pagination
   defp paging_params(%{
          address_hash: address_hash,
@@ -462,6 +475,10 @@ defmodule BlockScoutWeb.Chain do
 
   defp paging_params(%Instance{token_id: token_id}) do
     %{"unique_token" => Decimal.to_integer(token_id)}
+  end
+
+  defp paging_params(%StateChange{}) do
+    %{"state_changes" => nil}
   end
 
   defp block_or_transaction_from_param(param) do

@@ -58,7 +58,8 @@ defmodule BlockScoutWeb.API.V2.BlockView do
       "gas_used_percentage" => gas_used_percentage(block),
       "burnt_fees_percentage" => burnt_fees_percentage(burned_fee, tx_fees),
       "type" => block |> BlockView.block_type() |> String.downcase(),
-      "tx_fees" => tx_fees
+      "tx_fees" => tx_fees,
+      "withdrawals_count" => count_withdrawals(block)
     }
   end
 
@@ -84,7 +85,7 @@ defmodule BlockScoutWeb.API.V2.BlockView do
   end
 
   def gas_target(block) do
-    elasticity_multiplier = 2
+    elasticity_multiplier = Application.get_env(:explorer, :elasticity_multiplier)
     ratio = Decimal.div(block.gas_used, Decimal.div(block.gas_limit, elasticity_multiplier))
     ratio |> Decimal.sub(1) |> Decimal.mult(100) |> Decimal.to_float()
   end
@@ -103,4 +104,7 @@ defmodule BlockScoutWeb.API.V2.BlockView do
 
   def count_transactions(%Block{transactions: txs}) when is_list(txs), do: Enum.count(txs)
   def count_transactions(_), do: nil
+
+  def count_withdrawals(%Block{withdrawals: withdrawals}) when is_list(withdrawals), do: Enum.count(withdrawals)
+  def count_withdrawals(_), do: nil
 end

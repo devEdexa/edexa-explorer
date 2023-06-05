@@ -24,7 +24,7 @@ defmodule Explorer.Mixfile do
         dialyzer: :test
       ],
       start_permanent: Mix.env() == :prod,
-      version: "5.1.2",
+      version: "5.1.5",
       xref: [exclude: [BlockScoutWeb.WebRouter.Helpers]]
     ]
   end
@@ -81,7 +81,7 @@ defmodule Explorer.Mixfile do
       # Data factory for testing
       {:ex_machina, "~> 2.3", only: [:test]},
       {:exvcr, "~> 0.10", only: :test},
-      {:httpoison, "~> 1.6"},
+      {:httpoison, "~> 2.0"},
       {:jason, "~> 1.3"},
       {:junit_formatter, ">= 0.0.0", only: [:test], runtime: false},
       # Log errors and application output to separate files
@@ -113,7 +113,7 @@ defmodule Explorer.Mixfile do
       # `Timex.Duration` for `Explorer.Counters.AverageBlockTime.average_block_time/0`
       {:timex, "~> 3.7.1"},
       {:con_cache, "~> 1.0"},
-      {:tesla, "~> 1.6.0"},
+      {:tesla, "~> 1.7.0"},
       {:cbor, "~> 1.0"},
       {:cloak_ecto, "~> 1.2.0"},
       {:redix, "~> 1.1"},

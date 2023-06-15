@@ -1,0 +1,1 @@
+docker-compose -f docker-compose/docker-compose-no-build-ganache.yml up --force-recreate --build -d

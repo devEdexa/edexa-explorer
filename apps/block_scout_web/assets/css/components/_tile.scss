@@ -2,7 +2,7 @@ $tile-type-block-color: $primary !default;
 $tile-type-uncle-color: $cyan !default;
 $tile-type-reorg-color: $purple !default;
 $tile-type-emission-reward-color: $lilac !default;
-$tile-type-transaction-color: $blue !default;
+$tile-type-transaction-color: $green !default;
 $tile-type-contract-call-color: $green !default;
 $tile-type-contract-creation-color: $dark-purple !default;
 $tile-type-token-transfer-color: $orange !default;
@@ -161,7 +161,7 @@ $tile-body-a-color: #5959d8 !default;
     margin-left: 1rem;
 
     &:not(:last-of-type)::after {
-      content: ",";
+      content: ',';
     }
   }
 
@@ -180,7 +180,7 @@ $tile-body-a-color: #5959d8 !default;
     color: $tile-body-a-color;
   }
 
-  a[data-test=token_link] {
+  a[data-test='token_link'] {
     color: $tile-body-a-color;
   }
 
@@ -217,46 +217,52 @@ $tile-body-a-color: #5959d8 !default;
   padding: $tile-padding;
 
   @include generate-tile-block(
-    ".tile-type-block",
+    '.tile-type-block',
     $tile-type-block-color,
     darken($tile-type-block-color, 20%)
   );
-  @include generate-tile-block(".tile-type-uncle", $tile-type-uncle-color);
-  @include generate-tile-block(".tile-type-reorg", $tile-type-reorg-color);
   @include generate-tile-block(
-    ".tile-type-emission-reward",
+    '.tile-type-uncle',
+    $tile-type-uncle-color
+  );
+  @include generate-tile-block(
+    '.tile-type-reorg',
+    $tile-type-reorg-color
+  );
+  @include generate-tile-block(
+    '.tile-type-emission-reward',
     $tile-type-emission-reward-color
   );
   @include generate-tile-block(
-    ".tile-type-transaction",
+    '.tile-type-transaction',
     $tile-type-transaction-color
   );
   @include generate-tile-block(
-    ".tile-type-contract-call",
+    '.tile-type-contract-call',
     $tile-type-contract-call-color
   );
   @include generate-tile-block(
-    ".tile-type-contract-creation",
+    '.tile-type-contract-creation',
     $tile-type-contract-creation-color
   );
   @include generate-tile-block(
-    ".tile-type-token-transfer",
+    '.tile-type-token-transfer',
     $tile-type-token-transfer-color
   );
   @include generate-tile-block(
-    ".tile-type-unique-token",
+    '.tile-type-unique-token',
     $tile-type-unique-token-color
   );
   @include generate-tile-block(
-    ".tile-type-unique-token-image",
+    '.tile-type-unique-token-image',
     $tile-type-unique-token-image-color
   );
   @include generate-tile-block(
-    ".tile-type-internal-transaction",
+    '.tile-type-internal-transaction',
     $tile-type-internal-transaction-color
   );
   @include generate-tile-block(
-    ".tile-type-api-documentation",
+    '.tile-type-api-documentation',
     $tile-type-api-documentation-color
   );
   @include generate-tile-block(
@@ -264,7 +270,7 @@ $tile-body-a-color: #5959d8 !default;
     $tile-status-error-reason
   );
   @include generate-tile-block(
-    ".tile-status--awaiting-internal-transactions",
+    '.tile-status--awaiting-internal-transactions',
     $tile-status-awaiting-internal-transactions
   );
 
@@ -279,7 +285,7 @@ $tile-body-a-color: #5959d8 !default;
   @include media-breakpoint-down(md) {
     margin-bottom: 1rem;
 
-    [data-selector="place-holder"] & {
+    [data-selector='place-holder'] & {
       min-height: 105px;
     }
   }
@@ -353,8 +359,8 @@ $tile-body-a-color: #5959d8 !default;
         padding-right: 6px;
       }
     }
-    .tile-type-block {  
-      overflow: hidden; 
+    .tile-type-block {
+      overflow: hidden;
     }
     .row {
       @include media-breakpoint-down(lg) {
@@ -385,7 +391,12 @@ $tile-body-a-color: #5959d8 !default;
     height: inherit;
     content: '';
     position: absolute;
-    background: linear-gradient(to right, #f5f6fa 2%, #eee 18%, #f5f6fa 33%);
+    background: linear-gradient(
+      to right,
+      #f5f6fa 2%,
+      #eee 18%,
+      #f5f6fa 33%
+    );
     animation-duration: 1.7s;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
@@ -407,14 +418,19 @@ $tile-body-a-color: #5959d8 !default;
 }
 
 @keyframes tilePlaceholderAnimate {
-  0%{ background-position: -650px 0; }
-  100% { background-position: 650px 0; }
+  0% {
+    background-position: -650px 0;
+  }
+  100% {
+    background-position: 650px 0;
+  }
 }
 
 // Loading Animation
 
 @keyframes playBlockLoadingAnimation {
-  0%, 90% {
+  0%,
+  90% {
     opacity: 1;
   }
   100% {
@@ -422,7 +438,7 @@ $tile-body-a-color: #5959d8 !default;
   }
 }
 
-[data-selector="chain-block-list"] {
+[data-selector='chain-block-list'] {
   .col-lg-3:first-child {
     .tile-type-block-animation {
       animation: playBlockLoadingAnimation 2.1s linear forwards;
@@ -441,10 +457,10 @@ $tile-body-a-color: #5959d8 !default;
     left: -4px;
     width: calc(100% + 5px);
     height: calc(100% + 2px);
-    background-color: #F6F7F9;
+    background-color: #f6f7f9;
     border-radius: 4px;
     overflow: hidden;
-    transition: .24s ease-out;
+    transition: 0.24s ease-out;
     border-top: 1px solid #dee2e6;
     border-right: 1px solid #dee2e6;
     border-bottom: 1px solid #dee2e6;
@@ -462,7 +478,7 @@ $tile-body-a-color: #5959d8 !default;
       z-index: 2;
     }
     &:after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -497,7 +513,7 @@ $tile-body-a-color: #5959d8 !default;
   }
 }
 
-$cube-bezier: cubic-bezier(.25,.8,.25,1);
+$cube-bezier: cubic-bezier(0.25, 0.8, 0.25, 1);
 $cube-quantity: 5;
 
 .cube-animation-wrapper {
@@ -538,7 +554,7 @@ $cube-quantity: 5;
       left: 25px * $cube-quantity;
     }
     .cube-animation-column:nth-of-type(#{$cube-quantity}) svg {
-      transform: translate3d(0,0,0);
+      transform: translate3d(0, 0, 0);
       animation: shrink-expand 2.8s $cube-bezier forwards;
       animation-delay: -0.16s * $cube-quantity;
     }
